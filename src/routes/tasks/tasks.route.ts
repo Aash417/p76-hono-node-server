@@ -1,6 +1,10 @@
 import { createRoute, z } from '@hono/zod-openapi';
 import * as httpStatusCode from 'stoker/http-status-codes';
-import { jsonContent, jsonContentRequired } from 'stoker/openapi/helpers';
+import {
+   jsonContent,
+   jsonContentOneOf,
+   jsonContentRequired,
+} from 'stoker/openapi/helpers';
 import { createErrorSchema, IdParamsSchema } from 'stoker/openapi/schemas';
 
 import { notFoundSchema } from '@/lib/constants';
@@ -14,6 +18,7 @@ const insertTaskSchema = tasksSchema.omit({
 const extendedInsertSchema = insertTaskSchema.extend({
    name: insertTaskSchema.shape.name.min(1, 'Name is required'),
 });
+const pathcTaskSchema = extendedInsertSchema.partial();
 
 const tags = ['Tasks'];
 
@@ -62,6 +67,47 @@ export const getOne = createRoute({
    },
 });
 
+export const patch = createRoute({
+   tags,
+   path: '/task/{id}',
+   method: 'post',
+   request: {
+      params: IdParamsSchema,
+      body: jsonContentRequired(pathcTaskSchema, 'Task to update'),
+   },
+   responses: {
+      [httpStatusCode.OK]: jsonContent(tasksSchema, 'Created task'),
+      [httpStatusCode.NOT_FOUND]: jsonContent(notFoundSchema, 'Task not found'),
+      [httpStatusCode.UNPROCESSABLE_ENTITY]: jsonContentOneOf(
+         [
+            createErrorSchema(insertTaskSchema),
+            createErrorSchema(IdParamsSchema),
+         ],
+
+         'The validation error',
+      ),
+   },
+});
+
+export const remove = createRoute({
+   tags,
+   path: '/task/{id}',
+   method: 'delete',
+   request: {
+      params: IdParamsSchema,
+   },
+   responses: {
+      [httpStatusCode.NO_CONTENT]: { description: 'Task deleted' },
+      [httpStatusCode.NOT_FOUND]: jsonContent(notFoundSchema, 'Task not found'),
+      [httpStatusCode.UNPROCESSABLE_ENTITY]: jsonContent(
+         createErrorSchema(IdParamsSchema),
+         'Invalid Id',
+      ),
+   },
+});
+
 export type ListRoute = typeof list;
 export type CreateRoute = typeof create;
 export type GetOneRoute = typeof getOne;
+export type PatchRoute = typeof patch;
+export type RemoveRoute = typeof remove;

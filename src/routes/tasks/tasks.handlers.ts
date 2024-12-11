@@ -6,6 +6,8 @@ import type {
    CreateRoute,
    GetOneRoute,
    ListRoute,
+   PatchRoute,
+   RemoveRoute,
 } from '@/routes/tasks/tasks.route';
 
 import db from '@/db';
@@ -42,4 +44,44 @@ export const getOne: AppRouteHandler<GetOneRoute> = async (c) => {
    }
 
    return c.json(task, httpStatusCode.OK);
+};
+
+export const patch: AppRouteHandler<PatchRoute> = async (c) => {
+   const { id } = c.req.param();
+   const body = c.req.valid('json');
+
+   const task = await db.tasks.findFirst({
+      where: {
+         id: Number(id),
+      },
+   });
+   if (!task) {
+      return c.json(
+         { message: HttpStatusPhrases.NOT_FOUND },
+         httpStatusCode.NOT_FOUND,
+      );
+   }
+
+   const updatedTask = await db.tasks.update({
+      where: { id: Number(id) },
+      data: body,
+   });
+
+   return c.json(updatedTask, httpStatusCode.OK);
+};
+
+export const remove: AppRouteHandler<RemoveRoute> = async (c) => {
+   const { id } = c.req.param();
+
+   const deletedTask = await db.tasks.delete({
+      where: { id: Number(id) },
+   });
+   if (!deletedTask) {
+      return c.json(
+         { message: HttpStatusPhrases.NOT_FOUND },
+         httpStatusCode.NOT_FOUND,
+      );
+   }
+
+   return c.body(null, httpStatusCode.NO_CONTENT);
 };
