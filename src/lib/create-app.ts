@@ -1,10 +1,11 @@
-import { AppBinding } from '@/lib/types';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { config } from 'dotenv';
 import { expand } from 'dotenv-expand';
 import { logger } from 'hono/logger';
 import { notFound, onError, serveEmojiFavicon } from 'stoker/middlewares';
 import { defaultHook } from 'stoker/openapi';
+
+import type { AppBinding } from '@/lib/types';
 
 expand(config());
 

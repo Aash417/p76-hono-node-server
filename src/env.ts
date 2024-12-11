@@ -25,6 +25,7 @@ const EnvSchema = z.object({
       'trace',
       'silent',
    ]),
+   DATABASE_URL: z.string().url(),
 });
 
 export type env = z.infer<typeof EnvSchema>;
