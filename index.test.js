@@ -17,8 +17,7 @@ const axios = {
       try {
          const res = await axios2.post(...args);
          return res;
-      }
-      catch (e) {
+      } catch (e) {
          return e.response;
       }
    },
@@ -26,8 +25,7 @@ const axios = {
       try {
          const res = await axios2.get(...args);
          return res;
-      }
-      catch (e) {
+      } catch (e) {
          return e.response;
       }
    },
@@ -35,8 +33,7 @@ const axios = {
       try {
          const res = await axios2.put(...args);
          return res;
-      }
-      catch (e) {
+      } catch (e) {
          return e.response;
       }
    },
@@ -44,8 +41,7 @@ const axios = {
       try {
          const res = await axios2.delete(...args);
          return res;
-      }
-      catch (e) {
+      } catch (e) {
          return e.response;
       }
    },

@@ -1,26 +1,31 @@
+import { AppBinding } from '@/lib/types';
 import { OpenAPIHono } from '@hono/zod-openapi';
 import { config } from 'dotenv';
 import { expand } from 'dotenv-expand';
-import type { PinoLogger } from 'hono-pino';
+import { logger } from 'hono/logger';
 import { notFound, onError, serveEmojiFavicon } from 'stoker/middlewares';
-import { pinoLogger } from '../middlewares/pino-logger';
+import { defaultHook } from 'stoker/openapi';
 
 expand(config());
 
-type AppBinding = {
-   Variables: {
-      logger: PinoLogger;
-   };
-};
-
 export default function createApp() {
-   const app = new OpenAPIHono<AppBinding>({ strict: false });
+   const app = createRouter();
 
    app.use(serveEmojiFavicon('🔥'));
-   app.use(pinoLogger());
+   app.use(logger());
+
+   // for detailed logs use pino logger.
+   // app.use(pinoLogger());
 
    app.notFound(notFound);
    app.onError(onError);
 
    return app;
+}
+
+export function createRouter() {
+   return new OpenAPIHono<AppBinding>({
+      strict: false,
+      defaultHook,
+   });
 }
