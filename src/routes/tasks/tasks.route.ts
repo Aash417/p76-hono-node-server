@@ -18,7 +18,7 @@ const insertTaskSchema = tasksSchema.omit({
 const extendedInsertSchema = insertTaskSchema.extend({
    name: insertTaskSchema.shape.name.min(1, 'Name is required'),
 });
-const pathcTaskSchema = extendedInsertSchema.partial();
+const patchTaskSchema = extendedInsertSchema.partial();
 
 const tags = ['Tasks'];
 
@@ -73,7 +73,7 @@ export const patch = createRoute({
    method: 'patch',
    request: {
       params: IdParamsSchema,
-      body: jsonContentRequired(pathcTaskSchema, 'Task to update'),
+      body: jsonContentRequired(patchTaskSchema, 'Task to update'),
    },
    responses: {
       [httpStatusCode.OK]: jsonContent(tasksSchema, 'Created task'),

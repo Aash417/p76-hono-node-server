@@ -14,7 +14,6 @@ export default function configureOpenApi(app: AppOpenApi) {
    }),
       app.get(
          '/reference',
-
          apiReference({
             spec: {
                url: '/docs',

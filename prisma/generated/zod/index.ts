@@ -826,6 +826,7 @@ export const tasksFindManyArgsSchema: z.ZodType<Prisma.tasksFindManyArgs> = z
    })
    .strict();
 
+/**
 export const tasksAggregateArgsSchema: z.ZodType<Prisma.tasksAggregateArgs> = z
    .object({
       where: tasksWhereInputSchema.optional(),
@@ -840,6 +841,7 @@ export const tasksAggregateArgsSchema: z.ZodType<Prisma.tasksAggregateArgs> = z
       skip: z.number().optional(),
    })
    .strict();
+ */
 
 export const tasksGroupByArgsSchema: z.ZodType<Prisma.tasksGroupByArgs> = z
    .object({
