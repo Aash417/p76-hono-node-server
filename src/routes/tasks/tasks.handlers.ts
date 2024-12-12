@@ -10,7 +10,7 @@ import type {
    RemoveRoute,
 } from '@/routes/tasks/tasks.route';
 
-import db from '@/db';
+import { db } from '@/db';
 
 export const list: AppRouteHandler<ListRoute> = async (c) => {
    const tasks = await db.tasks.findMany();

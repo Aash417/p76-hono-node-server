@@ -70,7 +70,7 @@ export const getOne = createRoute({
 export const patch = createRoute({
    tags,
    path: '/task/{id}',
-   method: 'post',
+   method: 'patch',
    request: {
       params: IdParamsSchema,
       body: jsonContentRequired(pathcTaskSchema, 'Task to update'),

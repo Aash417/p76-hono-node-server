@@ -5,7 +5,7 @@ import { logger } from 'hono/logger';
 import { notFound, onError, serveEmojiFavicon } from 'stoker/middlewares';
 import { defaultHook } from 'stoker/openapi';
 
-import type { AppBinding } from '@/lib/types';
+import type { AppBinding, AppOpenApi } from '@/lib/types';
 
 expand(config());
 
@@ -29,4 +29,12 @@ export function createRouter() {
       strict: false,
       defaultHook,
    });
+}
+
+export function createTestApp(router: AppOpenApi) {
+   const testApp = createApp();
+
+   testApp.route('/', router);
+
+   return testApp;
 }
